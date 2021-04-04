@@ -2,6 +2,7 @@ package test.base;
 
 import controller.AppiumController;
 import io.appium.java_client.AppiumDriver;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
 import pages.MainPage;
@@ -20,9 +21,9 @@ public class BaseTest {
         mainPage = new MainPage(driver);
     }
 
-//    @AfterMethod(alwaysRun = true)
-//    public void stopProcessor(){
-//        AppiumController.instance.driver
-//                .closeApp();
-//    }
+    @AfterMethod(alwaysRun = true)
+    public void stopProcessor() {
+        AppiumController.instance.driver
+                .closeApp();
+    }
 }

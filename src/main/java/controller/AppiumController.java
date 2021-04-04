@@ -19,7 +19,7 @@ public class AppiumController {
     public WebDriverWait wait;
 
     public void start(String platform) throws MalformedURLException {
-        if(platform.equals("Android")){
+        if (platform.equals("Android")) {
             driver = new AndroidDriver<MobileElement>(new URL("http://127.0.0.1:4723/wd/hub"), capabilitiesAndroid());
         } else {
             driver = new IOSDriver<MobileElement>(new URL("http://127.0.0.1:4723/wd/hub"), capabilitiesIos());
