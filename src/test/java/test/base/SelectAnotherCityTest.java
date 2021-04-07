@@ -9,7 +9,7 @@ public class SelectAnotherCityTest extends BaseTest {
 
     @Test
     public void selectAnotherCity() throws MalformedURLException {
-        createDriver("iOS");
+        createDriver("android");
         mainPage.selectCity("Broome");
     }
 
