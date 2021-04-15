@@ -7,6 +7,8 @@ import io.appium.java_client.pagefactory.iOSXCUITFindBy;
 import org.junit.Assert;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.util.concurrent.TimeUnit;
+
 public class MainPage extends BasePage {
 
     @AndroidFindBy(id = "android:id/content")
@@ -26,8 +28,9 @@ public class MainPage extends BasePage {
     }
 
     public void selectCity(String city) {
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         MAIN_SCREEN.isEnabled();
-        wait.until(ExpectedConditions.elementToBeClickable(CHANGE_CITY)).click();
+        CHANGE_CITY.click();
         SELECT_CITY.sendKeys(city);
         if (driver.getPlatformName().equals("android")) {
             MobileElement searchResult = driver.findElementByXPath("//android.widget.RadioButton[@content-desc='" + city + "']");
