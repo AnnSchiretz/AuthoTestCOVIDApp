@@ -1,29 +1,37 @@
 package test.base;
 
+import controller.AppiumBaseClass;
 import controller.AppiumController;
 import io.appium.java_client.AppiumDriver;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Parameters;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+import pages.ContactCodesPage;
 import pages.MainPage;
+import pages.NotificationsPage;
 
+import javax.usb.UsbException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 
 
-public class BaseTest {
+public class BaseTest extends AppiumBaseClass {
     public AppiumDriver driver;
     public MainPage mainPage;
+    public ContactCodesPage contactPage;
+    public NotificationsPage notifications;
 
-    @Parameters
-    @BeforeMethod
-    public void createDriver(String platformName) throws MalformedURLException {
-        AppiumController.instance.start(platformName);
-        mainPage = new MainPage(driver);
+
+    @BeforeTest
+    public void createDriver() throws MalformedURLException {
+      AppiumController.instance.start();
+      mainPage = new MainPage(driver());
+      contactPage = new ContactCodesPage(driver());
+      notifications = new NotificationsPage(driver());
     }
 
-    @AfterMethod(alwaysRun = true)
-    public void stopProcessor() {
-        AppiumController.instance.driver
-                .closeApp();
-    }
+
+//    @AfterTest
+//    public void stopProcessor() {
+//        AppiumController.instance.driver.quit();
+//    }
 }

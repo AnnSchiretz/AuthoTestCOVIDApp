@@ -7,6 +7,8 @@ import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.concurrent.TimeUnit;
+
 public class BasePage extends AppiumBaseClass {
     public AppiumDriver<MobileElement> driver;
     public WebDriverWait wait;
@@ -14,6 +16,6 @@ public class BasePage extends AppiumBaseClass {
     public BasePage(AppiumDriver driver) {
         this.driver = driver();
         PageFactory.initElements(new AppiumFieldDecorator(this.driver), this);
-        wait = new WebDriverWait(this.driver, 20);
+        driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
     }
 }
