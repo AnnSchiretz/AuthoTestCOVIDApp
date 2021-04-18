@@ -16,6 +16,6 @@ public class BasePage extends AppiumBaseClass {
     public BasePage(AppiumDriver driver) {
         this.driver = driver();
         PageFactory.initElements(new AppiumFieldDecorator(this.driver), this);
-        driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(40, TimeUnit.SECONDS);
     }
 }

@@ -3,14 +3,11 @@ package test.base;
 import controller.AppiumBaseClass;
 import controller.AppiumController;
 import io.appium.java_client.AppiumDriver;
-import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import pages.ContactCodesPage;
+import pages.HealthJournalPage;
 import pages.MainPage;
 import pages.NotificationsPage;
-
-import javax.usb.UsbException;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 
 
@@ -19,6 +16,7 @@ public class BaseTest extends AppiumBaseClass {
     public MainPage mainPage;
     public ContactCodesPage contactPage;
     public NotificationsPage notifications;
+    public HealthJournalPage healthJournal;
 
 
     @BeforeTest
@@ -27,7 +25,9 @@ public class BaseTest extends AppiumBaseClass {
       mainPage = new MainPage(driver());
       contactPage = new ContactCodesPage(driver());
       notifications = new NotificationsPage(driver());
+      healthJournal = new HealthJournalPage(driver());
     }
+
 
 
 //    @AfterTest

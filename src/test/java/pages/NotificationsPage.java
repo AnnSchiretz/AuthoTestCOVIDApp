@@ -25,16 +25,6 @@ public class NotificationsPage extends BasePage{
 
     public NotificationsPage(AppiumDriver driver) {
         super(driver);
-        isPageOpen();
-    }
-
-    private void isPageOpen(){
-        try{
-            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-            MY_NOTIFICATION.click();
-        } catch (TimeoutException exception){
-            throw new TimeoutException("Page not loaded");
-        }
     }
 
     public void goToSendCodeContacts() {
@@ -45,10 +35,7 @@ public class NotificationsPage extends BasePage{
             helper.scrollToElement();
             GO_TO_CODE_PAGE.click();
         } else {
-            MobileElement ifTestIsPositive = driver.findElement(MobileBy.AndroidUIAutomator(
-                    "new UiScrollable(new UiSelector().scrollable(true))" +
-                            ".scrollIntoView(new UiSelector().textContains(\"Что делать, если у вас положительный результат анализа на COVID-19\"))"));
-            ifTestIsPositive.click();
+            helper.scrollToMobileElementAndroid("Что делать, если у вас положительный результат анализа на COVID-19").click();
             MobileElement goToCodePage = driver.findElement(MobileBy.AndroidUIAutomator(
                     "new UiScrollable(new UiSelector().scrollable(true))" +
                             ".scrollIntoView(new UiSelector().textContains(\"Передать коды тесных контактов\"))"));
