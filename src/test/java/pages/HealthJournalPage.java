@@ -77,14 +77,10 @@ public class HealthJournalPage extends BasePage {
             DONE_BUTTON.click();
             List<MobileElement> exp = driver.findElementsByXPath("//XCUIElementTypeStaticText");
             for (MobileElement el : exp) {
-                try {
-                    String str = el.getText();
-                    Assert.assertTrue(str.startsWith("0   симптомов"));
-                } catch (Exception ex) {
-                    continue;
-                }
+                 if(el.getText().startsWith("0   симптомов")){
+                     Assert.assertTrue(el.getText().startsWith("0   симптомов"));
+                 }
             }
-//            String result = driver.findElementByXPath("//XCUIElementTypeStaticText").getText();
         }
     }
 
