@@ -5,10 +5,16 @@ import test.base.BaseTest;
 
 public class HealthJournalTest extends BaseTest {
     @Test
-    public void healthJournal(){
+    public void healthJournalBadResult(){
         mainPage.goToHealthJournal();
         healthJournal.selectSymptoms("Кашель");
         healthJournal.continueStep();
         healthJournal.badResult();
+    }
+
+    @Test
+    public void healthJournalPositiveResult(){
+        mainPage.goToHealthJournal();
+        healthJournal.haveNotSymptoms();
     }
 }

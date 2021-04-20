@@ -3,11 +3,8 @@ package pages;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.ios.IOSDriver;
-import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.iOSXCUITFindBy;
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import pages.object.ExpectedObject;
 import utils.ActionsHelper;
 
@@ -23,6 +20,10 @@ public class HealthJournalPage extends BasePage {
     MobileElement BAD_RESULT;
     @iOSXCUITFindBy(xpath = "//XCUIElementTypeButton[@name='Готово']")
     MobileElement DONE_BUTTON;
+    @iOSXCUITFindBy(xpath = "//XCUIElementTypeButton[@name='Я хорошо себя чувствую сегодня']")
+    MobileElement GOOD_FEELING_BUTTON;
+    @iOSXCUITFindBy(xpath = "//XCUIElementTypeStaticText[contains(@name, '0   симптомов')]")
+    MobileElement ZERO_SYMPTOMS;
 
     String OPTIONS_IOS = "//XCUIElementTypeOther";
     String OPTIONS_ANDROID = "//android.widget.CheckBox";
@@ -35,15 +36,15 @@ public class HealthJournalPage extends BasePage {
     }
 
     public void selectSymptoms(Object... values) {
-        if(driver instanceof IOSDriver){
+        if (driver instanceof IOSDriver) {
             driver.findElementByXPath(OPTIONS_IOS).isDisplayed();
             String userOption = Arrays.toString(Arrays.stream(values).toArray()).replace("[", "").replace("]", "") + ", Сегодня у вас наблюдались какие-либо из следующих 11 симптомов?";
             List<MobileElement> optionsInApp = driver.findElementsByXPath(OPTIONS_IOS);
             optionsInApp.stream().map(ExpectedObject::new).forEach((ExpectedObject elem) -> {
                 if (userOption.equals(elem.name) && elem.value.equals("true")) {
-                    try{
+                    try {
                         elem.element.click();
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
                         helper.scrollToElement();
                         elem.element.click();
                     }
@@ -52,23 +53,43 @@ public class HealthJournalPage extends BasePage {
         } else {
             driver.findElementByXPath(OPTIONS_ANDROID).isDisplayed();
             String userOption = Arrays.toString(Arrays.stream(values).toArray()).replace("[", "").replace("]", "") + ", Сегодня у вас наблюдались какие-либо из следующих 11 симптомов?";
-            List<MobileElement>optionsInApp = driver.findElementsByXPath(OPTIONS_ANDROID);
+            List<MobileElement> optionsInApp = driver.findElementsByXPath(OPTIONS_ANDROID);
             optionsInApp.forEach((option) -> {
-                        if (userOption.equals(option.getAttribute("content-desc"))) {
-                            option.click();
-                        }
-                    });
+                if (userOption.equals(option.getAttribute("content-desc"))) {
+                    option.click();
+                }
+            });
             helper.scrollDownAndroid();
             optionsInApp.addAll(driver.findElementsByXPath(OPTIONS_ANDROID));
             optionsInApp.forEach((option) -> {
                 if (userOption.equals(option.getAttribute("content-desc"))) {
-                    System.out.println(option.getAttribute("content-desc"));
                     option.click();
                 }
             });
-    }};
-    public void continueStep(){
-        if(driver instanceof IOSDriver){
+        }
+    }
+
+    public void haveNotSymptoms() {
+        if (driver instanceof IOSDriver) {
+            GOOD_FEELING_BUTTON.click();
+            String res = driver.findElementByXPath("//XCUIElementTypeStaticText[@name ='Спасибо, что заполнили журнал сегодня. Мы рады, что вы хорошо себя чувствуете!']").getText();
+            Assert.assertEquals(res, "Спасибо, что заполнили журнал сегодня. Мы рады, что вы хорошо себя чувствуете!");
+            DONE_BUTTON.click();
+            List<MobileElement> exp = driver.findElementsByXPath("//XCUIElementTypeStaticText");
+            for (MobileElement el : exp) {
+                try {
+                    String str = el.getText();
+                    Assert.assertTrue(str.startsWith("0   симптомов"));
+                } catch (Exception ex) {
+                    continue;
+                }
+            }
+//            String result = driver.findElementByXPath("//XCUIElementTypeStaticText").getText();
+        }
+    }
+
+    public void continueStep() {
+        if (driver instanceof IOSDriver) {
             helper.scrollToElement();
             CONTINUE_BUTTON.click();
         } else {
@@ -78,16 +99,16 @@ public class HealthJournalPage extends BasePage {
 
     }
 
-    public void badResult(){
+    public void badResult(Object... values) {
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-        if(driver instanceof IOSDriver){
+        if (driver instanceof IOSDriver) {
             String result = BAD_RESULT.getText();
             Assert.assertEquals("Не сошлись результаты", "Нам жаль, что вы плохо себя чувствуете. К сожалению, симптомы, которые вы указали сегодня, могут быть признаками COVID-19.", result);
             helper.scrollToElement();
             helper.scrollToElement();
             DONE_BUTTON.click();
-            List<MobileElement> res = driver.findElementsByClassName("");
-            Assert.assertNotEquals("Не должны сходиться числа", res.size() + 1, res.size());
+            List<MobileElement> res = driver.findElementsByXPath("//XCUIElementTypeStaticText");
+            Assert.assertFalse(res.isEmpty());
         } else {
             driver.findElementByClassName("android.widget.TextView").click();
             String result = driver.findElementByClassName("android.widget.TextView").getText();
@@ -95,8 +116,8 @@ public class HealthJournalPage extends BasePage {
             helper.scrollDownAndroid();
             Assert.assertEquals("Не сошлись результаты", "Нам жаль, что вы плохо себя чувствуете. К сожалению, симптомы, которые вы указали сегодня, могут быть признаками COVID-19.", result);
             helper.clickElementCustom(CONTINUE_BUTTON_ANDROID, "Готово");
-            List<MobileElement> res = driver.findElementsByClassName("android.widget.TextView");
-            Assert.assertNotEquals("Не должны сходиться числа", res.size() + 1, res.size());
+            List<MobileElement> res = driver.findElementsByXPath("//android.widget.TextView");
+            Assert.assertFalse(res.isEmpty());
         }
     }
 }

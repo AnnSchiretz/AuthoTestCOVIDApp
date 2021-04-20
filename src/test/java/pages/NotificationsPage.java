@@ -15,9 +15,6 @@ public class NotificationsPage extends BasePage{
 
     public ActionsHelper helper;
 
-    @AndroidFindBy(xpath = "//android.widget.TextView[contains(@text, 'Приложение сейчас не может отправлять вам оповещения. Настройте оповещения о COVID.')]")
-    @iOSXCUITFindBy(accessibility = "Приложение сейчас не может отправлять вам оповещения. Настройте оповещения о COVID.")
-    public MobileElement MY_NOTIFICATION;
     @iOSXCUITFindBy(accessibility = "Что делать, если у вас положительный результат анализа на COVID-19")
     public MobileElement IF_YOUR_TEST_IS_POSITIVE;
     @iOSXCUITFindBy(xpath = "//XCUIElementTypeButton[@name='Передать коды тесных контактов']")
