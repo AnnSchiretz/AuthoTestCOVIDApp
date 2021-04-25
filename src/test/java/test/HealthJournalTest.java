@@ -4,16 +4,17 @@ import org.testng.annotations.Test;
 import test.base.BaseTest;
 
 public class HealthJournalTest extends BaseTest {
+
     @Test
-    public void healthJournalBadResult(){
+    public void healthJournalBadResult() {
         mainPage.goToHealthJournal();
-        healthJournal.selectSymptoms("Кашель");
+        healthJournal.selectSymptoms("Кашель", "Слабость");
         healthJournal.continueStep();
-        healthJournal.badResult();
+        healthJournal.badResult("Кашель", "Слабость");
     }
 
     @Test
-    public void healthJournalPositiveResult(){
+    public void healthJournalPositiveResult() {
         mainPage.goToHealthJournal();
         healthJournal.haveNotSymptoms();
     }

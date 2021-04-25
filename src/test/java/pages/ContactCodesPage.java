@@ -7,9 +7,7 @@ import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.iOSXCUITFindBy;
 import org.junit.Assert;
-import org.openqa.selenium.TimeoutException;
-
-import java.util.concurrent.TimeUnit;
+import pages.base.BasePage;
 
 public class ContactCodesPage extends BasePage {
 
@@ -26,9 +24,9 @@ public class ContactCodesPage extends BasePage {
         super(driver);
     }
 
-    public void enterCode(String code){
+    public void enterCode(String code) {
         ENTER_CODE.sendKeys(code);
-        if(driver instanceof IOSDriver){
+        if (driver instanceof IOSDriver) {
             String result = CODE_RESULT.getAttribute("value");
             Assert.assertEquals("Недействительный код. Повторите попытку.", result);
         } else {

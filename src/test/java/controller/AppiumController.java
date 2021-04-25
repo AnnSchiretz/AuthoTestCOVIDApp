@@ -6,7 +6,6 @@ import controller.device.AndroidFinder;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
-import io.appium.java_client.remote.MobileCapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.MalformedURLException;
@@ -30,8 +29,9 @@ public class AppiumController {
             capabilities.setCapability("platformName", "android");
             capabilities.setCapability("platformVersion", "8.1");
             capabilities.setCapability("udid", "379656517d84");
-            capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "UiAutomator2");
-            capabilities.setCapability("appWaitDuration", 30000);
+            capabilities.setCapability("automationName", "UiAutomator2");
+            capabilities.setCapability("adbExecTimeout", 30000);
+            capabilities.setCapability("newCommandTimeout", 30);
             capabilities.setCapability("noReset", true);
             capabilities.setCapability("appPackage", "gov.ny.health.proximity");
             capabilities.setCapability("appActivity", "gov.ny.health.proximity.MainActivity");
