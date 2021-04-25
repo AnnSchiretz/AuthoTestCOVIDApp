@@ -1,17 +1,15 @@
-package pages;
+package pages.base;
 
 import controller.AppiumBaseClass;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.concurrent.TimeUnit;
 
 public class BasePage extends AppiumBaseClass {
     public AppiumDriver<MobileElement> driver;
-    public WebDriverWait wait;
 
     public BasePage(AppiumDriver driver) {
         this.driver = driver();

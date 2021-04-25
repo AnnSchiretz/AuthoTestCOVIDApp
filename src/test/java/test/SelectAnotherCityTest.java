@@ -1,7 +1,6 @@
 package test;
 
 
-
 import org.testng.annotations.Test;
 import test.base.BaseTest;
 

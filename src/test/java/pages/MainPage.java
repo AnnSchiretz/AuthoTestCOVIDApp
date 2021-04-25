@@ -3,31 +3,44 @@ package pages;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.iOSXCUITFindBy;
 import org.junit.Assert;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import pages.base.BasePage;
 import utils.ActionsHelper;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class MainPage extends BasePage {
-    ActionsHelper helper;
-    String CLASS_NAME = "XCUIElementTypeButton";
-    String TEXT = "Журнал здоровья Сообщите нам, если у вас\n" +
-            "сегодня имеются симптомы";
+
     @AndroidFindBy(id = "android:id/content")
-    @iOSXCUITFindBy(xpath = "//XCUIElementTypeButton[contains(@name,'Приложение сейчас не может отправлять вам оповещения. Настройте оповещения о COVID.')]")
+    @iOSXCUITFindBy(
+            xpath = "//XCUIElementTypeButton[contains(@name,'Приложение сейчас не может отправлять вам оповещения. Настройте оповещения о" +
+                    " COVID.')]")
     public MobileElement MAIN_SCREEN;
-    @AndroidFindBy(xpath = "//android.widget.Button[contains(@content-desc,'Выберите ваш округ, чтобы посмотреть для него статистику, в настоящее время выбран вариант')]")
-    @iOSXCUITFindBy(xpath = "//XCUIElementTypeButton[contains(@name ,'Выберите ваш округ, чтобы посмотреть для него статистику, в настоящее время выбран вариант')]")
+    @AndroidFindBy(
+            xpath = "//android.widget.Button[contains(@content-desc,'Выберите ваш округ, чтобы посмотреть для него статистику, в " +
+                    "настоящее время выбран вариант')]")
+    @iOSXCUITFindBy(
+            xpath = "//XCUIElementTypeButton[contains(@name ,'Выберите ваш округ, чтобы посмотреть для него статистику, в настоящее время" +
+                    " выбран вариант')]")
     public MobileElement CHANGE_CITY;
     @AndroidFindBy(xpath = "//android.widget.EditText[@content-desc='Поиск: показывает предлагаемые варианты автозаполнения']")
     @iOSXCUITFindBy(xpath = "//XCUIElementTypeOther[contains(@name, 'Поиск: показывает предлагаемые варианты автозаполнения')]")
     public MobileElement SELECT_CITY;
-    @AndroidFindBy(xpath = "//android.widget.Button[contains(@content-desc,'Выберите ваш округ, чтобы посмотреть для него статистику, в настоящее время выбран вариант')]/android.widget.TextView")
+    @AndroidFindBy(
+            xpath = "//android.widget.Button[contains(@content-desc,'Выберите ваш округ, чтобы посмотреть для него статистику, в " +
+                    "настоящее время выбран вариант')]/android.widget.TextView")
     public MobileElement SELECT_RESULT;
+    @iOSXCUITFindBy(accessibility = "Настройки\nприложения")
+    public MobileElement SETTING;
+    ActionsHelper helper;
+    String CLASS_NAME = "XCUIElementTypeButton";
+    String TEXT = "Журнал здоровья Сообщите нам, если у вас\n" +
+            "сегодня имеются симптомы";
+    @iOSXCUITFindBy(accessibility = "Мои оповещения о COVID")
+    @AndroidFindBy(xpath = "//android.view.View[@content-desc='Мои оповещения о COVID, 3 of 4,']")
+    MobileElement NOTIFICATIONS;
 
 
     public MainPage(AppiumDriver driver) {
@@ -35,11 +48,10 @@ public class MainPage extends BasePage {
     }
 
     public void selectCity(String city) {
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         MAIN_SCREEN.isEnabled();
         CHANGE_CITY.click();
         SELECT_CITY.sendKeys(city);
-        if (driver.getPlatformName().equals("android")) {
+        if (driver instanceof AndroidDriver) {
             MobileElement searchResult = driver.findElementByXPath("//android.widget.RadioButton[@content-desc='" + city + "']");
             searchResult.click();
             String selectResult = SELECT_RESULT.getText();
@@ -51,17 +63,27 @@ public class MainPage extends BasePage {
             Assert.assertTrue(res.contains(city));
         }
     }
-    public void goToHealthJournal(){
-        String CLASS = "android.widget.TextView";
-        String text = "Журнал здоровья";
-        if(driver instanceof AndroidDriver){
-            helper = new ActionsHelper(this.driver);
-            helper.clickElementCustom(CLASS, text);
+
+    public void goToHealthJournal() {
+        helper = new ActionsHelper(this.driver);
+        if (driver instanceof AndroidDriver) {
+            helper.clickElementCustom("android.widget.TextView", "Журнал здоровья");
         } else {
-            driver.manage().timeouts().implicitlyWait(5,TimeUnit.SECONDS);
-            helper = new ActionsHelper(this.driver);
             helper.clickElementCustom(CLASS_NAME, TEXT);
         }
     }
 
+    public void goToSettingsPage() {
+        if (driver instanceof IOSDriver) {
+            SETTING.click();
+        } else {
+            helper = new ActionsHelper(this.driver);
+            helper.clickElementCustom("android.widget.TextView", "Настройки\nприложения");
+        }
+
+    }
+
+    public void goToNotificationsPage() {
+        NOTIFICATIONS.click();
+    }
 }
